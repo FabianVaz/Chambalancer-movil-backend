@@ -4,7 +4,7 @@ const serviceSchema = new mongoose.Schema({
   name: { type: String, required: true },
   description: { type: String, required: true },
   price: { type: Number, required: true },
-  author: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
+  author: { type: String, required: true } // Asegúrate de que esto esté como String
 });
 
 const Service = mongoose.model('Service', serviceSchema);

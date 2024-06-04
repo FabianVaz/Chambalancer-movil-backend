@@ -10,7 +10,7 @@ router.post('/', async (req, res) => {
       name,
       description,
       price,
-      author: authorName
+      author: authorName // Asegúrate de que esto sea authorName
     });
     await service.save();
     res.status(201).json(service);
@@ -48,7 +48,7 @@ router.put('/:id', async (req, res) => {
       name,
       description,
       price,
-      author: authorName
+      author: authorName // Asegúrate de que esto sea authorName
     }, { new: true });
     if (!service) return res.status(404).json({ message: 'Service not found' });
     res.json(service);
