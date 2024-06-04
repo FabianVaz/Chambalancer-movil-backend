@@ -4,9 +4,14 @@ const router = express.Router();
 
 // Crear un nuevo servicio
 router.post('/', async (req, res) => {
-  const { name, description, price, author } = req.body;
+  const { name, description, price, authorName } = req.body;
   try {
-    const service = new Service({ name, description, price, author });
+    const service = new Service({
+      name,
+      description,
+      price,
+      author: authorName
+    });
     await service.save();
     res.status(201).json(service);
   } catch (error) {
@@ -17,7 +22,7 @@ router.post('/', async (req, res) => {
 // Obtener todos los servicios
 router.get('/', async (req, res) => {
   try {
-    const services = await Service.find().populate('author', 'firstName lastName email');
+    const services = await Service.find();
     res.json(services);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -27,7 +32,7 @@ router.get('/', async (req, res) => {
 // Obtener un servicio por ID
 router.get('/:id', async (req, res) => {
   try {
-    const service = await Service.findById(req.params.id).populate('author', 'firstName lastName email');
+    const service = await Service.findById(req.params.id);
     if (!service) return res.status(404).json({ message: 'Service not found' });
     res.json(service);
   } catch (error) {
@@ -37,9 +42,14 @@ router.get('/:id', async (req, res) => {
 
 // Actualizar un servicio por ID
 router.put('/:id', async (req, res) => {
-  const { name, description, price, author } = req.body;
+  const { name, description, price, authorName } = req.body;
   try {
-    const service = await Service.findByIdAndUpdate(req.params.id, { name, description, price, author }, { new: true });
+    const service = await Service.findByIdAndUpdate(req.params.id, {
+      name,
+      description,
+      price,
+      author: authorName
+    }, { new: true });
     if (!service) return res.status(404).json({ message: 'Service not found' });
     res.json(service);
   } catch (error) {
