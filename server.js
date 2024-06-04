@@ -1,22 +1,23 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
 const serviceRoutes = require('./routes/serviceRoutes');
-require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({
+  origin: '*', // Permitir todas las solicitudes de cualquier origen
+}));
 
-// MongoDB Connection
-const mongoURI = process.env.MONGODB_URI;
-
-mongoose.connect(mongoURI)
+mongoose.connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
     .then(() => {
         console.log('Connected to MongoDB');
     })
@@ -24,7 +25,6 @@ mongoose.connect(mongoURI)
         console.error('Failed to connect to MongoDB', err);
     });
 
-// Routes
 app.use('/api/users', userRoutes);
 app.use('/api/services', serviceRoutes);
 
